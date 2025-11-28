@@ -1,0 +1,359 @@
+{
+  "name": "whatsapp2",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "You are a helpful assistant 🏨 Recommending dishes based on preferences, allergies, and dietary restrictions.\n\nAnswering menu questions clearly and accurately.\n\nTaking reservations and providing availability details.\n\nSuggesting wine or drink pairings.\n\nProviding restaurant hours, location, parking info, and policies.\n\nHelping with order customization and special requests.\n\nMaintaining warm, polite, and professional hospitality at all times.\n\nYou MUST follow these rules:"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "df03eca3-048f-43d1-b818-2520dd411057",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "9d4db538-4771-40a7-9247-63ab6b4065fa",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "c1EL96PYcxOI7ckr",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.message.text }}",
+        "contextWindowLength": 10000
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        208
+      ],
+      "id": "36703eb4-f8bf-4794-be2c-634ad06ce2a9",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1QXZSCsj9N8PT_wocaoFB6pvy5tHuuxm95rkdRkuhY84",
+          "mode": "list",
+          "cachedResultName": "inventory",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QXZSCsj9N8PT_wocaoFB6pvy5tHuuxm95rkdRkuhY84/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QXZSCsj9N8PT_wocaoFB6pvy5tHuuxm95rkdRkuhY84/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        368,
+        208
+      ],
+      "id": "3c888344-3659-47da-8c6b-ac66aa05c781",
+      "name": "inventory",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Pz3R9gOx9kCPtOXN",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1YQiU6ccjzbCNKl6TAargMmdSHvyBTkv6L4JmhDL-cAY",
+          "mode": "list",
+          "cachedResultName": "order",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YQiU6ccjzbCNKl6TAargMmdSHvyBTkv6L4JmhDL-cAY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YQiU6ccjzbCNKl6TAargMmdSHvyBTkv6L4JmhDL-cAY/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Customer name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Customer_name', ``, 'string') }}",
+            "Food item": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Food_item', ``, 'string') }}",
+            "Quantity order": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Quantity_order', ``, 'string') }}",
+            "order date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('order_date', ``, 'string') }}",
+            "status": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('status', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Customer name",
+              "displayName": "Customer name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Food item",
+              "displayName": "Food item",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Quantity order",
+              "displayName": "Quantity order",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "order date",
+              "displayName": "order date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        528,
+        224
+      ],
+      "id": "2f9a6ddf-27cd-4dd7-b4a9-ed84ccf905b5",
+      "name": "Append row in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Pz3R9gOx9kCPtOXN",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1-LfDEz29aokBZOEAhHOhA9xyEld9qwrUq6bqQDSKxvk",
+          "mode": "list",
+          "cachedResultName": "FAQ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-LfDEz29aokBZOEAhHOhA9xyEld9qwrUq6bqQDSKxvk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-LfDEz29aokBZOEAhHOhA9xyEld9qwrUq6bqQDSKxvk/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        720,
+        256
+      ],
+      "id": "e31b004f-e20a-474e-9c00-72dceb4a1e71",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Pz3R9gOx9kCPtOXN",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "6560791378",
+        "text": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        560,
+        0
+      ],
+      "id": "26920091-31c4-4862-bf93-70fc543151ec",
+      "name": "Send a text message",
+      "webhookId": "3a8eed67-2b84-421c-8868-dbfef0dae0e4",
+      "credentials": {
+        "telegramApi": {
+          "id": "GMv7bn2PIjySGFC2",
+          "name": "Telegram account 8"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        16
+      ],
+      "id": "695655e1-5038-48c5-a3ab-2c5e4297f545",
+      "name": "Telegram Trigger",
+      "webhookId": "c36b7ea6-a13d-4f84-8a07-37761610fa1b",
+      "credentials": {
+        "telegramApi": {
+          "id": "Pcc3l5j8gqOMg03P",
+          "name": "Telegram account 3"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "inventory": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "31f775d9-1b42-41c0-9dbd-664fc3dae2d1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "06d21d3d9c12d3ec36fe291f3f68cdd6e99ff4166037249eb6f16e77c2ecd61e"
+  },
+  "id": "EHgWC5WrBNhzpJh2",
+  "tags": []
+}
